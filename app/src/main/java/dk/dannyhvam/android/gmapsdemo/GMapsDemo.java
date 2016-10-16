@@ -68,19 +68,21 @@ public class GMapsDemo extends AppCompatActivity implements OnMapReadyCallback, 
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        int radius = 100 + (progress * 100);
-        LatLngBounds bounds = getBounds(mLatLng, radius);
-        CameraUpdate camUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mCirclePadding);
-        if (mAnimateCamera) {
-            mMap.stopAnimation();
-            mMap.animateCamera(camUpdate, 50, null);
-        } else {
-            mMap.moveCamera(camUpdate);
+        if (mMap != null) {
+            int radius = 100 + (progress * 100);
+            LatLngBounds bounds = getBounds(mLatLng, radius);
+            CameraUpdate camUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mCirclePadding);
+            if (mAnimateCamera) {
+                mMap.stopAnimation();
+                mMap.animateCamera(camUpdate, 50, null);
+            } else {
+                mMap.moveCamera(camUpdate);
+            }
+            if (mCircle != null) {
+                mCircle.remove();
+            }
+            mCircle = mMap.addCircle(createCircleOption(mLatLng, radius));
         }
-        if (mCircle != null) {
-            mCircle.remove();
-        }
-        mCircle = mMap.addCircle(createCircleOption(mLatLng, radius));
     }
 
     public static LatLngBounds getBounds(LatLng center, double radius) {
